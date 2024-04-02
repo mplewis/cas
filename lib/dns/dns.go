@@ -17,7 +17,7 @@ type client struct {
 }
 
 type Client interface {
-	DidCasRecords(domain string) ([]string, error)
+	DidCasSigs(domain string) ([]string, error)
 }
 
 func NewClient(txtRecordClient TxtRecordClient) Client {
@@ -48,17 +48,18 @@ func DefaultTxtRecordClient(domain string) ([]string, error) {
 	return records, nil
 }
 
-func (c *client) DidCasRecords(domain string) ([]string, error) {
+func (c *client) DidCasSigs(domain string) ([]string, error) {
 	txtRecords, err := c.txtRecordClient(domain)
 	if err != nil {
 		return nil, err
 	}
 
-	var didCasRecords []string
+	var didCasSigs []string
 	for _, record := range txtRecords {
-		if DID_CAS_TMPL.MatchString(record) {
-			didCasRecords = append(didCasRecords, record)
+		matches := DID_CAS_TMPL.FindStringSubmatch(record)
+		if matches != nil {
+			didCasSigs = append(didCasSigs, matches[1])
 		}
 	}
-	return didCasRecords, nil
+	return didCasSigs, nil
 }

@@ -17,8 +17,5 @@ func fakeTxtRecordClient(domain string) ([]string, error) {
 
 func main() {
 	c := dns.NewClient(fakeTxtRecordClient)
-	fmt.Println(c.DidCasRecords("example.com"))
-	fmt.Println(c.DidCasRecords("mplewis.com"))
-	fmt.Println(c.DidCasRecords("gmail.com"))
-	fmt.Println(c.DidCasRecords("_netblocks.google.com"))
+	fmt.Println(c.DidCasSigs("example.com"))
 }
