@@ -8,7 +8,7 @@ import (
 
 const DNS_SERVER = "8.8.8.8:53"
 
-var DID_CAS_TMPL = regexp.MustCompile(`^did:cas:v1:([A-Za-z0-9+/]+={0,2})$`)
+var DID_CAS_TMPL = regexp.MustCompile(`^did:cas:v1:([A-Za-z0-9-_]+)$`)
 
 type TxtRecordClient func(domain string) ([]string, error)
 
@@ -58,7 +58,7 @@ func (c *client) DidCasSigs(domain string) ([]string, error) {
 	for _, record := range txtRecords {
 		matches := DID_CAS_TMPL.FindStringSubmatch(record)
 		if matches != nil {
-			didCasSigs = append(didCasSigs, matches[1])
+			didCasSigs = append(didCasSigs, record)
 		}
 	}
 	return didCasSigs, nil
